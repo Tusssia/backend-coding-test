@@ -33,9 +33,7 @@ public class TaskController {
         } else {
             return ResponseEntity.ok(taskService.getAllByDescription(pageRequest, description));
         }
-
     }
-
     @GetMapping("{taskID}")
     public ResponseEntity<TaskDTO> getTaskById(@PathVariable("taskID") long taskID) {
         return ResponseEntity.ok(taskService.getTaskById(taskID));
@@ -60,6 +58,5 @@ public class TaskController {
     public ResponseEntity<SubtaskDTO> addSubtask(@PathVariable("parentTaskID") long parentTaskID,
                                         @RequestBody SubtaskDTO subtask) {
         return ResponseEntity.ok(subtaskService.addSubtask(parentTaskID, subtask));
-
     }
 }
