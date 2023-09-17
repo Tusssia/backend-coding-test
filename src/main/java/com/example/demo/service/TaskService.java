@@ -24,6 +24,12 @@ public class TaskService {
         return TaskMapper.MAPPER.entityListToDtoList(taskList);
     }
 
+    public List<TaskDTO> getAllByDescription(PageRequest pageRequest, String description) {
+        Page<TaskEntity> page = taskRepository.findByDescriptionContainingIgnoreCase(description, pageRequest);
+        List<TaskEntity> taskList = page.getContent();
+        return TaskMapper.MAPPER.entityListToDtoList(taskList);
+    }
+
     public TaskDTO getTaskById(long taskID) {
         TaskEntity task = taskRepository.findById(taskID).orElse(null);
         return TaskMapper.MAPPER.entityToDto(task);
@@ -51,4 +57,5 @@ public class TaskService {
     public void deleteTask(long taskID) {
         taskRepository.deleteById(taskID);
     }
+
 }

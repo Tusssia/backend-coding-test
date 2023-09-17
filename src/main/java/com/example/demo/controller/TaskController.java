@@ -24,10 +24,16 @@ public class TaskController {
 
     @GetMapping
     public ResponseEntity<List<TaskDTO>> getAll(@RequestParam(name = "sort", defaultValue = "id") String sort,
-                                                @RequestParam(name = "direction", defaultValue =  "asc") String direction) {
+                                                @RequestParam(name = "direction", defaultValue =  "asc") String direction,
+                                                @RequestParam(required = false) String description) {
         PageRequest pageRequest = PageRequest.of(0, 10, direction.equals("asc") ? Sort.by(sort).ascending()
                 : Sort.by(sort).descending());
-        return ResponseEntity.ok(taskService.getAll(pageRequest));
+        if (description == null) {
+            return ResponseEntity.ok(taskService.getAll(pageRequest));
+        } else {
+            return ResponseEntity.ok(taskService.getAllByDescription(pageRequest, description));
+        }
+
     }
 
     @GetMapping("{taskID}")
