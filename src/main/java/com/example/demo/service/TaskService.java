@@ -7,6 +7,7 @@ import com.example.demo.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -32,13 +33,16 @@ public class TaskService {
     }
 
     public TaskDTO updateTask(long taskID, TaskDTO task) {
-        TaskEntity taskEntity = taskRepository.findById(taskID).orElse(null);
-        if (taskEntity != null) {
-            TaskEntity updatedTaskEntity = TaskMapper.MAPPER.dtoToEntity(task);
-            taskRepository.save(updatedTaskEntity);
-        }
-        //fix
-        return task;
+        TaskEntity taskEntity = taskRepository.findById(taskID)
+                .orElseThrow(() -> new EntityNotFoundException("Task with id: " + taskID + " does not exist"));
+        TaskEntity updatedTaskEntity = TaskMapper.MAPPER.dtoToEntity(task);
+
+        taskEntity.setDescription(updatedTaskEntity.getDescription());
+        taskEntity.setCompleted(updatedTaskEntity.isCompleted());
+        taskEntity.setPriority(updatedTaskEntity.getPriority());
+
+        taskRepository.save(taskEntity);
+        return TaskMapper.MAPPER.entityToDto(taskEntity);
     }
 
     public void deleteTask(long taskID) {

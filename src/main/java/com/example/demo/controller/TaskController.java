@@ -15,7 +15,7 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<TaskDTO>> getAll() {
         return ResponseEntity.ok(taskService.getAll());
     }
