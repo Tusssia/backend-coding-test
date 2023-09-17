@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import com.example.demo.dto.TaskDTO;
 import com.example.demo.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +18,11 @@ public class TaskController {
     private TaskService taskService;
 
     @GetMapping
-    public ResponseEntity<List<TaskDTO>> getAll() {
-        return ResponseEntity.ok(taskService.getAll());
+    public ResponseEntity<List<TaskDTO>> getAll(@RequestParam(name = "sort", defaultValue = "id") String sort,
+                                                @RequestParam(name = "direction", defaultValue =  "asc") String direction) {
+        PageRequest pageRequest = PageRequest.of(0, 10, direction.equals("asc") ? Sort.by(sort).ascending()
+                : Sort.by(sort).descending());
+        return ResponseEntity.ok(taskService.getAll(pageRequest));
     }
 
     @GetMapping("{taskID}")

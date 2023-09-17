@@ -5,6 +5,8 @@ import com.example.demo.mapper.TaskMapper;
 import com.example.demo.model.TaskEntity;
 import com.example.demo.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -16,8 +18,9 @@ public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
 
-    public List<TaskDTO> getAll() {
-        List<TaskEntity> taskList = taskRepository.findAll();
+    public List<TaskDTO> getAll(PageRequest pageRequest) {
+        Page<TaskEntity> page = taskRepository.findAll(pageRequest);
+        List<TaskEntity> taskList = page.getContent();
         return TaskMapper.MAPPER.entityListToDtoList(taskList);
     }
 
