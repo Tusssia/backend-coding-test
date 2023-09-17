@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.SubtaskDTO;
 import com.example.demo.dto.TaskDTO;
+import com.example.demo.service.SubtaskService;
 import com.example.demo.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +18,9 @@ public class TaskController {
 
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private SubtaskService subtaskService;
 
     @GetMapping
     public ResponseEntity<List<TaskDTO>> getAll(@RequestParam(name = "sort", defaultValue = "id") String sort,
@@ -45,4 +50,10 @@ public class TaskController {
         taskService.deleteTask(taskID);
     }
 
+    @PostMapping("{parentTaskID}/subtask")
+    public ResponseEntity<SubtaskDTO> addSubtask(@PathVariable("parentTaskID") long parentTaskID,
+                                        @RequestBody SubtaskDTO subtask) {
+        return ResponseEntity.ok(subtaskService.addSubtask(parentTaskID, subtask));
+
+    }
 }

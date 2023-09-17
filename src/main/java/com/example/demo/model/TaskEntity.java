@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor
@@ -15,9 +16,15 @@ public class TaskEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     private String description;
+
     private boolean completed;
+
     private TaskPriority priority;
+
+    @OneToMany
+    private Set<SubtaskEntity> subtasks;
 
     public void setId(long id) {
         this.id = id;
